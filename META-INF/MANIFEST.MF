@@ -4,3 +4,5 @@ Bundle-Name: SPARQL Query Plugin
 Bundle-SymbolicName: org.protege.editor.owl.rdf;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: The Protege Development Team
+Service-Component: OSGI-INF/*.xml
+
