@@ -3,5 +3,11 @@
 
 <plugin>
 
-
+    <extension id="SparqlQueryView"
+               point="org.protege.editor.core.application.ViewComponent">
+        <label value="SPARQL Query"/>
+        <class value="org.protege.editor.owl.rdf.SparqlQueryView"/>
+        <headerColor value="@org.protege.ontologycolor"/>
+        <category value="@org.protege.ontologycategory"/>
+    </extension>
 </plugin>

@@ -124,6 +124,8 @@
                <include name = "**/looks.jar"/>
            </patternset>
        </unjar>
+       <unjar dest="${build}"
+              src="${owl.rdf.lib}"/>
    </target>
 
    <target name="copy.resources">

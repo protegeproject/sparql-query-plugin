@@ -5,4 +5,19 @@ Bundle-SymbolicName: org.protege.editor.owl.rdf;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: The Protege Development Team
 Service-Component: OSGI-INF/*.xml
+Import-Package: javax.swing,
+ javax.swing.table,
+ org.openrdf.model,
+ org.openrdf.query,
+ org.openrdf.repository,
+ org.osgi.framework;version="1.6.0",
+ org.protege.editor.core;version="4.2.0.b249_2012_01_13_0550",
+ org.protege.editor.core.ui.error;version="4.2.0.b249_2012_01_13_0550",
+ org.protege.editor.core.ui.view;version="4.2.0.b249_2012_01_13_0550",
+ org.protege.editor.owl.model;version="4.2.0.b249_2012_01_10_1205",
+ org.protege.editor.owl.ui.view;version="4.2.0.b249_2012_01_10_1205",
+ org.protege.owl.rdf,
+ org.protege.owl.rdf.api,
+ org.protege.owl.rdf.impl,
+ org.semanticweb.owlapi.model;version="3.2.4.1889"
 
