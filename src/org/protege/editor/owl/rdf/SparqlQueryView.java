@@ -16,10 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 import org.protege.editor.core.ProtegeApplication;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 import org.protege.editor.owl.ui.renderer.OWLCellRenderer;
+import org.protege.editor.owl.ui.table.BasicOWLTable;
 import org.protege.editor.owl.ui.view.AbstractOWLViewComponent;
 import org.semanticweb.owlapi.model.OWLObject;
 
@@ -57,7 +59,14 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 		queryPane.setText(reasoner.getSampleQuery());
 		panel.add(queryPane);
 		resultModel = new SwingResultModel();
-		JTable results = new JTable(resultModel);
+		BasicOWLTable results = new BasicOWLTable(resultModel) {
+			private static final long serialVersionUID = 9143285439978520141L;
+
+			@Override
+			protected boolean isHeaderVisible() {
+				return true;
+			}
+		};
 		OWLCellRenderer renderer = new OWLCellRenderer(getOWLEditorKit());
 		renderer.setWrap(false);
 		results.setDefaultRenderer(Object.class, renderer);
