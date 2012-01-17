@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -57,6 +59,7 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 		resultModel = new SwingResultModel();
 		JTable results = new JTable(resultModel);
 		OWLCellRenderer renderer = new OWLCellRenderer(getOWLEditorKit());
+		renderer.setWrap(false);
 		results.setDefaultRenderer(Object.class, renderer);
 		JScrollPane scrollableResults = new JScrollPane(results);
 		panel.add(scrollableResults);
@@ -72,12 +75,13 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-				String query = queryPane.getText();
-				SparqlResultSet result = reasoner.executeQuery(query);
-				resultModel.setResults(result);
+					String query = queryPane.getText();
+					SparqlResultSet result = reasoner.executeQuery(query);
+					resultModel.setResults(result);
 				}
 				catch (SparqlReasonerException ex) {
 					ProtegeApplication.getErrorLog().logError(ex);
+					JOptionPane.showMessageDialog(getOWLWorkspace(), ex.getMessage() + "\nSee the logs for more information.");
 				}
 			}
 		});
