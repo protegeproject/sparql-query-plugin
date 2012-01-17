@@ -1,5 +1,7 @@
 package org.protege.editor.owl.rdf.repository;
 
+import java.util.Map.Entry;
+
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
@@ -11,6 +13,7 @@ import org.protege.editor.owl.rdf.SparqlResultSet;
 import org.protege.owl.rdf.Utilities;
 import org.protege.owl.rdf.api.OwlTripleStore;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.util.NamespaceUtil;
 
 public class BasicSparqlReasoner implements SparqlReasoner {
 	private OWLOntologyManager manager;
@@ -18,6 +21,23 @@ public class BasicSparqlReasoner implements SparqlReasoner {
 	
 	public BasicSparqlReasoner(OWLOntologyManager manager) {
 		this.manager = manager;
+	}
+	
+	@Override
+	public String getSampleQuery() {
+		StringBuffer sb = new StringBuffer();
+		NamespaceUtil nsUtil = new NamespaceUtil();
+		for (Entry<String, String> entry : nsUtil.getNamespace2PrefixMap().entrySet()) {
+			String ns = entry.getKey();
+			String prefix = entry.getValue();
+			sb.append("PREFIX ");
+			sb.append(prefix);
+			sb.append(": <");
+			sb.append(ns);
+			sb.append(">\n");
+		}
+		sb.append("SELECT ?subject ?object\n\tWHERE { ?subject rdfs:subClassOf ?object }");
+		return sb.toString();
 	}
 
 	@Override
@@ -40,7 +60,7 @@ public class BasicSparqlReasoner implements SparqlReasoner {
 			try {
 				connection = triples.getRepository().getConnection();
 				TupleQuery tquery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
-				QueryHandler handler = new QueryHandler();
+				QueryHandler handler = new QueryHandler(triples, manager.getOWLDataFactory());
 				tquery.evaluate(handler);
 				return handler.getQueryResult();
 			}
