@@ -17,7 +17,9 @@ import javax.swing.JTextPane;
 
 import org.protege.editor.core.ProtegeApplication;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
+import org.protege.editor.owl.ui.renderer.OWLCellRenderer;
 import org.protege.editor.owl.ui.view.AbstractOWLViewComponent;
+import org.semanticweb.owlapi.model.OWLObject;
 
 public class SparqlQueryView extends AbstractOWLViewComponent {
 	private static final long serialVersionUID = -1370725700740073290L;
@@ -50,10 +52,12 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0,1));
 		queryPane = new JTextPane();
-		queryPane.setText("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?subject ?object\n\tWHERE { ?subject rdfs:subClassOf ?object }");
+		queryPane.setText(reasoner.getSampleQuery());
 		panel.add(queryPane);
 		resultModel = new SwingResultModel();
 		JTable results = new JTable(resultModel);
+		OWLCellRenderer renderer = new OWLCellRenderer(getOWLEditorKit());
+		results.setDefaultRenderer(Object.class, renderer);
 		JScrollPane scrollableResults = new JScrollPane(results);
 		panel.add(scrollableResults);
 		return panel;
