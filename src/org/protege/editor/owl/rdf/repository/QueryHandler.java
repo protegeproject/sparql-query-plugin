@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openrdf.model.BNode;
 import org.openrdf.model.Value;
+import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerException;
@@ -37,13 +38,14 @@ public class QueryHandler implements TupleQueryResultHandler {
 	@Override
 	public void handleSolution(BindingSet bindingSet) throws TupleQueryResultHandlerException {
 		try {
-		List<Object> row = new ArrayList<Object>();
-		for (int i = 0; i < queryResult.getColumnCount(); i++) {
-			String columnName = queryResult.getColumnName(i);
-			Value v = bindingSet.getBinding(columnName).getValue();
-			row.add(convertValue(v));
-		}
-		queryResult.addRow(row);
+			List<Object> row = new ArrayList<Object>();
+			for (int i = 0; i < queryResult.getColumnCount(); i++) {
+				String columnName = queryResult.getColumnName(i);
+				Binding binding = bindingSet.getBinding(columnName);
+				Value v = binding != null ? binding.getValue() : (Value) null;
+				row.add(convertValue(v));
+			}
+			queryResult.addRow(row);
 		}
 		catch (RepositoryException re) {
 			throw new TupleQueryResultHandlerException(re);
