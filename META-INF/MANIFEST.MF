@@ -20,6 +20,7 @@ Import-Package: javax.swing,
  org.protege.owl.rdf,
  org.protege.owl.rdf.api,
  org.protege.owl.rdf.impl,
+ org.semanticweb.owlapi.io;version="3.2.4.1912",
  org.semanticweb.owlapi.model;version="3.2.4",
  org.semanticweb.owlapi.util;version="3.2.4"
 
