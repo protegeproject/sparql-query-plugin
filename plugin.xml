@@ -10,4 +10,14 @@
         <headerColor value="@org.protege.ontologycolor"/>
         <category value="@org.protege.ontologycategory"/>
     </extension>
+    
+        <extension id="SparqlTab"
+               point="org.protege.editor.core.application.WorkspaceTab">
+        <label value="SPARQL Query Tab"/>
+        <class value="org.protege.editor.owl.ui.OWLWorkspaceViewsTab"/>
+        <editorKitId value="OWLEditorKit"/>
+        <index value="Z"/>
+        <defaultViewConfigFileName value="viewconfig.xml"/>
+    </extension>
+    
 </plugin>
