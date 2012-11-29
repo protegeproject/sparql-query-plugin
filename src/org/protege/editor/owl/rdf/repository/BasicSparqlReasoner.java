@@ -1,12 +1,19 @@
 package org.protege.editor.owl.rdf.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
-import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.BooleanQuery;
+import org.openrdf.query.GraphQuery;
+import org.openrdf.query.Query;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
 import org.protege.editor.owl.rdf.SparqlReasoner;
 import org.protege.editor.owl.rdf.SparqlReasonerException;
 import org.protege.editor.owl.rdf.SparqlResultSet;
@@ -53,16 +60,25 @@ public class BasicSparqlReasoner implements SparqlReasoner {
 	}
 	
 	@Override
-	public SparqlResultSet executeQuery(String query) throws SparqlReasonerException {
+	public SparqlResultSet executeQuery(String queryString) throws SparqlReasonerException {
 		precalculate();
 		try {
 			RepositoryConnection connection = null;
 			try {
 				connection = triples.getRepository().getConnection();
-				TupleQuery tquery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
-				QueryHandler handler = new QueryHandler(triples, manager.getOWLDataFactory());
-				tquery.evaluate(handler);
-				return handler.getQueryResult();
+				Query query = connection.prepareQuery(QueryLanguage.SPARQL, queryString);
+				if (query instanceof TupleQuery) {
+					return handleTupleQuery((TupleQuery) query);
+				}
+				else if (query instanceof GraphQuery) {
+					return handleGraphQuery((GraphQuery) query);
+				}
+				else if (query instanceof BooleanQuery) {
+					return handleBooleanQuery((BooleanQuery) query);
+				}
+				else {
+					throw new IllegalStateException("Can't handle queries of type " + query.getClass());
+				}
 			}
 			finally {
 				if (connection != null) {
@@ -74,10 +90,31 @@ public class BasicSparqlReasoner implements SparqlReasoner {
 			throw new SparqlReasonerException(e);
 		}
 	}
+	
+	private SparqlResultSet handleTupleQuery(TupleQuery tupleQuery) throws QueryEvaluationException, TupleQueryResultHandlerException {
+		TupleQueryHandler handler = new TupleQueryHandler(triples);
+		tupleQuery.evaluate(handler);
+		return handler.getQueryResult();
+	}
+	
+	private SparqlResultSet handleGraphQuery(GraphQuery graph) throws QueryEvaluationException, RDFHandlerException {
+		GraphQueryHandler handler = new GraphQueryHandler(triples);
+		graph.evaluate(handler);
+		return handler.getQueryResult();
+	}
+	
+	private SparqlResultSet handleBooleanQuery(BooleanQuery booleanQuery) throws QueryEvaluationException {
+		List<String> columnNames = new ArrayList<String>();
+		columnNames.add("Result");
+		SparqlResultSet result = new SparqlResultSet(columnNames);
+		List<Object> row = new ArrayList<Object>();
+		row.add(booleanQuery.evaluate() ? "True" : "False");
+		result.addRow(row);
+		return result;
+	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		
 	}
 

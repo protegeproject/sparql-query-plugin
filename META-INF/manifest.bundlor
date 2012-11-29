@@ -1,0 +1,18 @@
+Bundle-Name: Protege SPARQL Plugin
+Bundle-Description: Simple SPARQL Plugin
+Bundle-Vendor: Protege Development Team
+Bundle-ContactAddress: p4-feedback@lists.stanford.edu
+Bundle-DocURL: http://protege.stanford.edu
+Bundle-Category: protege
+Bundle-SymbolicName: ${plugin};singleton:=true
+Bundle-ManifestVersion: 2
+Bundle-Version: ${bundle.version}
+Built-By: ${user.name}
+Import-Template: javax.swing.*;version="0.0.0",
+ org.openrdf.*;version="[2.6,3)",
+ org.protege.editor.core.*;version="[4.2,5)",
+ org.protege.editor.owl.*;version="[4.2,5)",
+ org.semanticweb.owlapi.*;version="[3.2,3.3)",
+ org.protege.owl.rdf.*;version="[1,2)"
+Import-Package: org.protege.editor.owl.ui
+
