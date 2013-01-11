@@ -12,7 +12,7 @@ Import-Template: javax.swing.*;version="0.0.0",
  org.openrdf.*;version="[2.6,3)",
  org.protege.editor.core.*;version="[4.2,5)",
  org.protege.editor.owl.*;version="[4.2,5)",
- org.semanticweb.owlapi.*;version="[3.2,3.3)",
+ org.semanticweb.owlapi.*;version="[3.2,4.0)",
  org.protege.owl.rdf.*;version="[1,2)"
 Import-Package: org.protege.editor.owl.ui
 
