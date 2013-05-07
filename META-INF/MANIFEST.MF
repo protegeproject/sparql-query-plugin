@@ -1,18 +1,18 @@
 Manifest-Version: 1.0
-Export-Package: org.protege.editor.owl.rdf;version="1.0.0.2013_01_11_0
- 553";uses:="javax.swing,javax.swing.table,org.protege.editor.owl.ui.t
+Export-Package: org.protege.editor.owl.rdf;version="1.0.0.2013_05_07_0
+ 344";uses:="javax.swing,javax.swing.table,org.protege.editor.owl.ui.t
  able,org.protege.editor.owl.ui.view,org.semanticweb.owlapi.model",org
- .protege.editor.owl.rdf.repository;version="1.0.0.2013_01_11_0553";us
+ .protege.editor.owl.rdf.repository;version="1.0.0.2013_05_07_0344";us
  es:="org.openrdf.model,org.openrdf.query,org.openrdf.repository,org.o
  penrdf.rio,org.protege.editor.owl.rdf,org.protege.owl.rdf.api,org.sem
  anticweb.owlapi.model"
-Built-By: redmond
+Built-By: vendetti
 Bundle-Category: protege
-Tool: Bundlor 1.1.0.M05
+Tool: Bundlor 1.1.0.M04
 Bundle-Name: Protege SPARQL Plugin
 Bundle-Vendor: Protege Development Team
 Bundle-ContactAddress: p4-feedback@lists.stanford.edu
-Bundle-Version: 1.0.0.2013_01_11_0553
+Bundle-Version: 1.0.0.2013_05_07_0344
 Bundle-ManifestVersion: 2
 Bundle-Description: Simple SPARQL Plugin
 Bundle-SymbolicName: org.protege.editor.owl.rdf;singleton:="true"

@@ -9,7 +9,7 @@
      -->
 
    <property environment="env"/>
-   <property name = "protege.home"      location="${env.PROTEGE_HOME}"/>
+   <property name = "protege.home"      location="C:\Program Files\Protege_4.2"/>
    <property file="${protege.home}/build.properties"/>
    <property file="local.properties"/>
    <property name = "bundlor.home"      location="${env.BUNDLOR_HOME}"/>
@@ -25,7 +25,7 @@
    <!-- 
         these properties probably don't need changing
         -->
-   <property name = "src"               location = "./src"/>  
+   <property name = "src"               location = "./src/main/java"/>  
    <property name = "build"             location = "./build"/>
    <property name = "classes"           location = "${build}/classes"/>
    <property name = "lib"               location = "./lib"/>
@@ -130,7 +130,7 @@
 
    <target name="copy.resources">
      <copy todir="${classes}">
-       <fileset dir="${src}">
+       <fileset dir="src/main/resources">
          <include name="**/*"/>
          <exclude name="**/*.java"/>
          <exclude name="**/MANIFEST.MF"/>
