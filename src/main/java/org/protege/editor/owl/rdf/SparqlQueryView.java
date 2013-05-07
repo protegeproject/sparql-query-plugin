@@ -10,20 +10,16 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextPane;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
 
 import org.protege.editor.core.ProtegeApplication;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 import org.protege.editor.owl.ui.renderer.OWLCellRenderer;
 import org.protege.editor.owl.ui.table.BasicOWLTable;
 import org.protege.editor.owl.ui.view.AbstractOWLViewComponent;
-import org.semanticweb.owlapi.model.OWLObject;
 
 public class SparqlQueryView extends AbstractOWLViewComponent {
 	private static final long serialVersionUID = -1370725700740073290L;

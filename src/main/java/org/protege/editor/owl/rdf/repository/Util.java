@@ -1,7 +1,6 @@
 package org.protege.editor.owl.rdf.repository;
 
 import org.openrdf.model.BNode;
-import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.repository.RepositoryException;
 import org.protege.owl.rdf.api.OwlTripleStore;
