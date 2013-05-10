@@ -6,6 +6,7 @@ import java.util.List;
 import org.openrdf.model.Value;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.QueryResultHandlerException;
 import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryException;
@@ -49,6 +50,16 @@ public class TupleQueryHandler implements TupleQueryResultHandler {
 	@Override
 	public void endQueryResult() throws TupleQueryResultHandlerException {
 
+	}
+
+	@Override
+	public void handleBoolean(boolean arg0) throws QueryResultHandlerException {
+		
+	}
+
+	@Override
+	public void handleLinks(List<String> arg0) throws QueryResultHandlerException {
+		
 	}
 
 }
