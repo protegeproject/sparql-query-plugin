@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-import org.protege.editor.core.ProtegeApplication;
+import org.protege.editor.core.ui.error.ErrorLogPanel;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 import org.protege.editor.owl.ui.renderer.OWLCellRenderer;
 import org.protege.editor.owl.ui.table.BasicOWLTable;
@@ -44,7 +44,7 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 			reasoner.precalculate();
 		}
 		catch (SparqlReasonerException e) {
-			ProtegeApplication.getErrorLog().logError(e);
+			ErrorLogPanel.showErrorDialog(e);
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 					resultModel.setResults(result);
 				}
 				catch (SparqlReasonerException ex) {
-					ProtegeApplication.getErrorLog().logError(ex);
+					ErrorLogPanel.showErrorDialog(ex);
 					JOptionPane.showMessageDialog(getOWLWorkspace(), ex.getMessage() + "\nSee the logs for more information.");
 				}
 			}
