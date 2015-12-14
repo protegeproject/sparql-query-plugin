@@ -108,7 +108,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>org.protege.editor.owl.rdf;singleton:=true</Bundle-SymbolicName>
                         <Bundle-Vendor>The Protege Development Team</Bundle-Vendor>
                         <Export-Package>org.protege.editor.owl.rdf.*;version=${project.version}</Export-Package>
                         <Import-Package>
