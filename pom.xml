@@ -13,7 +13,7 @@
     <version>2.0.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>Protege SPARQL Plugin</name>
+    <name>SPARQL Query Plugin</name>
     <description>Plug-in for the Protege Desktop ontology editor that provides support for writing and executing SPARQL queries.</description>
 
     <organization>
@@ -43,7 +43,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <protege.version>5.0.0-beta-19</protege.version>
+        <protege.version>5.0.0-beta-23</protege.version>
+        <rdflib.version>2.0.2</rdflib.version>
     </properties>
 
     <dependencies>
@@ -60,7 +61,7 @@
         <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>rdf-library</artifactId>
-            <version>2.0.1</version>
+            <version>${rdflib.version}</version>
         </dependency>
     </dependencies>
     
