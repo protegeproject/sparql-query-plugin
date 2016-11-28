@@ -1,25 +1,17 @@
 package org.protege.editor.owl.rdf;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
 import org.protege.editor.core.ui.error.ErrorLogPanel;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 import org.protege.editor.owl.ui.renderer.OWLCellRenderer;
 import org.protege.editor.owl.ui.table.BasicOWLTable;
 import org.protege.editor.owl.ui.view.AbstractOWLViewComponent;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.List;
 
 public class SparqlQueryView extends AbstractOWLViewComponent {
 	private static final long serialVersionUID = -1370725700740073290L;
@@ -53,7 +45,7 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 		panel.setLayout(new GridLayout(0,1));
 		queryPane = new JTextPane();
 		queryPane.setText(reasoner.getSampleQuery());
-		panel.add(queryPane);
+		panel.add(new JScrollPane(queryPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
 		resultModel = new SwingResultModel();
 		BasicOWLTable results = new BasicOWLTable(resultModel) {
 			private static final long serialVersionUID = 9143285439978520141L;
