@@ -44,7 +44,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <protege.version>5.2.0</protege.version>
-        <rdflib.version>2.0.2</rdflib.version>
+        <rdflib.version>2.0.3-SNAPSHOT</rdflib.version>
     </properties>
 
     <dependencies>
