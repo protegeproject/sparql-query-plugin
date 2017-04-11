@@ -10,7 +10,7 @@
     
     <groupId>edu.stanford.protege</groupId>
     <artifactId>sparql-query-plugin</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>SPARQL Query Plugin</name>
