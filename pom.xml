@@ -13,7 +13,7 @@
     <version>2.0.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>YASSP-SPARQL Query Plugin</name>
+    <name>SPARQL Query Plugin</name>
     <description>Plug-in for the Protege Desktop ontology editor that provides support for writing and executing SPARQL queries.</description>
 
     <organization>
