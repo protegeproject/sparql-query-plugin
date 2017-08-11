@@ -11,19 +11,19 @@ public class SparqlQueryView extends AbstractOWLViewComponent {
 
     private static final Logger log = LoggerFactory.getLogger(SparqlQueryView.class);
 
-    private SparqlQueryViewPanel yaspppanel;
+    private SparqlQueryViewPanel sparqlview;
 
     @Override
     protected void initialiseOWLView() throws Exception {
         setLayout(new GridLayout(1,1));        
-        yaspppanel = new SparqlQueryViewPanel(getOWLEditorKit());        
-        add(yaspppanel);        
+        sparqlview = new SparqlQueryViewPanel(getOWLEditorKit());        
+        add(sparqlview);        
         //log.info("Example View Component initialized");
         
     }
 
 	@Override
 	protected void disposeOWLView() {
-		yaspppanel.dispose();
+		sparqlview.dispose();
 	}
 }

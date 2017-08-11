@@ -1,7 +1,7 @@
 package org.protege.editor.owl.rdf;
-import  org.apache.poi.hssf.usermodel.HSSFSheet;
-import  org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import  org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -59,7 +59,7 @@ public class SparqlQueryViewPanel extends JPanel
      SparqlReasoner reasoner;
      JTextPane queryArea;
      JTable outArea;
-     YASPPTableModel model;
+     SPARQLResultTableModel model;
      JPanel buttonArea;
      JPanel southPanel;
      JScrollPane scrollNorthArea;
@@ -116,7 +116,7 @@ public class SparqlQueryViewPanel extends JPanel
         buttonArea.add(export);
         buttonArea.add(exportOpz);
             
-        model = new YASPPTableModel(0, 2);
+        model = new SPARQLResultTableModel(0, 2);
         model.setColumnIdentifiers(new String[]{"?subject","?object"});
         outArea=new JTable(model);
      
@@ -290,7 +290,7 @@ public class SparqlQueryViewPanel extends JPanel
     class ExportActionListener implements ActionListener
     {
 
-        private void toJSON(YASPPTableModel model, int[] iterator, BufferedWriter bw) throws IOException
+        private void toJSON(SPARQLResultTableModel model, int[] iterator, BufferedWriter bw) throws IOException
           {            
             StringBuilder result = new StringBuilder();
             result.append("{" + "\"head\": {");
@@ -368,7 +368,7 @@ public class SparqlQueryViewPanel extends JPanel
                        
             bw.write("]}}");            
           }
-        private void toExcel(YASPPTableModel model, int[] iterator, String name, FileOutputStream fileOut) throws IOException
+        private void toExcel(SPARQLResultTableModel model, int[] iterator, String name, FileOutputStream fileOut) throws IOException
           {
             // FileWriter fw = new FileWriter(chooser.getSelectedFile()+".xls");
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -386,7 +386,7 @@ public class SparqlQueryViewPanel extends JPanel
                                
             workbook.write(fileOut);                              
           }
-        private void toSimpleText(YASPPTableModel model, int [] iterator, BufferedWriter bw) throws IOException
+        private void toSimpleText(SPARQLResultTableModel model, int [] iterator, BufferedWriter bw) throws IOException
           {
             StringBuilder result = new StringBuilder();            
             for(int i=0; i<model.getColumnCount(); i++)
@@ -682,10 +682,10 @@ public class OptionDialog extends JDialog
 
   }
 
- class YASPPTableModel extends DefaultTableModel 
+ class SPARQLResultTableModel extends DefaultTableModel 
    {
 
-    public YASPPTableModel(int x, int y)
+    public SPARQLResultTableModel(int x, int y)
       {
          super(x, y);         
           
