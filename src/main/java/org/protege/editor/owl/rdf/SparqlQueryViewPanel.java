@@ -149,8 +149,7 @@ public class SparqlQueryViewPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(outArea.getSelectedRowCount()>0)
-                {
-                  
+                {                  
                   String result="";
                   for(int i=0; i< outArea.getSelectedRowCount();i++)
                   { 
