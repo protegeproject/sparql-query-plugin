@@ -317,15 +317,15 @@ public class SparqlQueryViewPanel extends JPanel
     class ExportActionListener implements ActionListener
     {
 
-        private void toJSON(SPARQLResultTableModel model, int[] iterator, BufferedWriter bw) throws IOException
+        private void toJSON(JTable table, int[] iterator, BufferedWriter bw) throws IOException
           {            
             StringBuilder result = new StringBuilder();
             result.append("{" + "\"head\": {");
             result.append("\"vars\": [");
-            for(int i=0; i<model.getColumnCount(); i++)
+            for(int i=0; i<table.getColumnCount(); i++)
               {
-                result.append("\"").append(model.getColumnName(i)).append("\"");
-                if(i!=model.getColumnCount()-1)
+                result.append("\"").append(table.getColumnName(i)).append("\"");
+                if(i!=table.getColumnCount()-1)
                    result.append(",");
               }
             result.append("]"); //close vars
@@ -337,29 +337,29 @@ public class SparqlQueryViewPanel extends JPanel
                {
                 result=new StringBuilder();
                 result.append("{");
-                for(int j=0; j < model.getColumnCount(); j++)
+                for(int j=0; j < table.getColumnCount(); j++)
                  {
-                   result.append("\"").append(model.getColumnName(j)).append("\":");
+                   result.append("\"").append(table.getColumnName(j)).append("\":");
                    result.append("{");
                    result.append("\"type\":");                   
-                   if(!model.getValueAt( iterator[i], j).toString().startsWith("\""))
+                   if(!table.getValueAt( iterator[i], j).toString().startsWith("\""))
                       {
-                        int c=isBnode(model.getValueAt(iterator[i], j).toString());
+                        int c=isBnode(table.getValueAt(iterator[i], j).toString());
                         if(c>0)
                           {
                             result.append("\"bnode\",\"value\":");
-                            result.append("\"").append(model.getValueAt(iterator[i], j).toString()).append("\"");
+                            result.append("\"").append(table.getValueAt(iterator[i], j).toString()).append("\"");
                           }
                         else
                          {
                           result.append("\"uri\",\"value\":\"");                          
-                          result.append(model.getValueAt(iterator[i], j).toString()).append("\"");
+                          result.append(table.getValueAt(iterator[i], j).toString()).append("\"");
                          }
                       }                 
                     else
                       {                      
                         result.append("\"literal\",\"value\":"); 
-                        String value= model.getValueAt(iterator[i], j).toString();                         
+                        String value= table.getValueAt(iterator[i], j).toString();                         
                         int dataMark= value.indexOf("^");
                         String type="";
                         int initMark=dataMark+3;
@@ -384,7 +384,7 @@ public class SparqlQueryViewPanel extends JPanel
                           
                        }
                      result.append("}");
-                     if(j!=model.getColumnCount()-1)
+                     if(j!=table.getColumnCount()-1)
                      result.append(",");
                   }
                  result.append("}");
@@ -395,7 +395,7 @@ public class SparqlQueryViewPanel extends JPanel
                        
             bw.write("]}}");            
           }
-        private void toExcel(SPARQLResultTableModel model, int[] iterator, String name, FileOutputStream fileOut) throws IOException
+        private void toExcel(JTable table, int[] iterator, String name, FileOutputStream fileOut) throws IOException
           {
             // FileWriter fw = new FileWriter(chooser.getSelectedFile()+".xls");
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -403,23 +403,23 @@ public class SparqlQueryViewPanel extends JPanel
             for(int i=0; i < iterator.length; i++)
               {
                HSSFRow rowhead = sheet.createRow((short)i);
-               for(int j=0; j < model.getColumnCount(); j++)
+               for(int j=0; j < table.getColumnCount(); j++)
                 {
-                  rowhead.createCell(j).setCellValue(model.getValueAt(iterator[i],j).toString());                                       
+                  rowhead.createCell(j).setCellValue(table.getValueAt(iterator[i],j).toString());                                       
                 }                    
               }
-            for(int i=0; i< model.getColumnCount(); i++)
+            for(int i=0; i< table.getColumnCount(); i++)
              sheet.autoSizeColumn(i); 
                                
             workbook.write(fileOut);                              
           }
-        private void toSimpleText(SPARQLResultTableModel model, int [] iterator, BufferedWriter bw) throws IOException
+        private void toSimpleText(JTable table, int [] iterator, BufferedWriter bw) throws IOException
           {
             StringBuilder result = new StringBuilder();            
-            for(int i=0; i<model.getColumnCount(); i++)
+            for(int i=0; i<table.getColumnCount(); i++)
               {
-                result.append(model.getColumnName(i));
-                if(i<model.getColumnCount()-1)
+                result.append(table.getColumnName(i));
+                if(i<table.getColumnCount()-1)
                     result.append(optionConfig.param[0]);
               }
             result.append(optionConfig.param[1]);
@@ -428,10 +428,10 @@ public class SparqlQueryViewPanel extends JPanel
             for(int i=0; i < iterator.length; i++)
                { 
                 result=new StringBuilder();               
-                for(int j=0; j < model.getColumnCount(); j++)
+                for(int j=0; j < table.getColumnCount(); j++)
                  {
-                   result.append(model.getValueAt(iterator[i], j));
-                   if(j<model.getColumnCount()-1)
+                   result.append(table.getValueAt(iterator[i], j));
+                   if(j<table.getColumnCount()-1)
                        result.append(optionConfig.param[0]);
                  }
                 result.append(optionConfig.param[1]);
@@ -463,8 +463,8 @@ public class SparqlQueryViewPanel extends JPanel
                 }
               else
                 {
-                  iterator=new int[model.getRowCount()];
-                  for(int i=0; i<model.getRowCount();i++)
+                  iterator=new int[outArea.getRowCount()];
+                  for(int i=0; i<outArea.getRowCount();i++)
                    iterator[i]=i;
                 }
                 
@@ -476,7 +476,7 @@ public class SparqlQueryViewPanel extends JPanel
                           case 0:
                              {  
                                FileOutputStream fileout = new FileOutputStream(chooser.getSelectedFile()+".xls");
-                               toExcel(model, iterator, chooser.getSelectedFile().getName(), fileout);                             
+                               toExcel(outArea, iterator, chooser.getSelectedFile().getName(), fileout);                             
                                fileout.close();
                                break;                       
                              }                     
@@ -484,7 +484,7 @@ public class SparqlQueryViewPanel extends JPanel
                               {     
                                 BufferedWriter bw = 
                                     new BufferedWriter(new FileWriter(chooser.getSelectedFile()+".srj", true));
-                                toJSON(model, iterator, bw);                                 
+                                toJSON(outArea, iterator, bw);                                 
                                 bw.close();
                                 break;  
                               }
@@ -492,7 +492,7 @@ public class SparqlQueryViewPanel extends JPanel
                             {
                                 BufferedWriter bw = 
                                     new BufferedWriter(new FileWriter(chooser.getSelectedFile(), true));
-                                toSimpleText(model, iterator, bw);                                 
+                                toSimpleText(outArea, iterator, bw);                                 
                                 bw.close();
                                 break;
                             }
@@ -628,7 +628,7 @@ public class OptionDialog extends JDialog
          setVisible(false);         
          setModal(true);        
          setLayout(new BorderLayout());
-         setResizable(false);
+         //setResizable(false);
          addWindowListener(new WindowAdapter() {
                      @Override
                      public void windowClosing(WindowEvent e) {
