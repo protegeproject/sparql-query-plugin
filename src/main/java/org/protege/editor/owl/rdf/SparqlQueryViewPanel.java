@@ -8,12 +8,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -36,11 +38,13 @@ import org.protege.editor.owl.OWLEditorKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.AttributeSet;
@@ -136,12 +140,36 @@ public class SparqlQueryViewPanel extends JPanel
                     if (! (gotFocus.equals(outArea) || gotFocus.equals(export) )) 
                       {
                         outArea.clearSelection(); 
-                        outArea.revalidate();
-                        outArea.repaint();
+                        //outArea.revalidate();
+                        //outArea.repaint();
                       }
               }           
                  });
-        
+        outArea.registerKeyboardAction( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(outArea.getSelectedRowCount()>0)
+                {
+                  
+                  String result="";
+                  for(int i=0; i< outArea.getSelectedRowCount();i++)
+                  { 
+                     StringBuilder build=new StringBuilder();
+                     for( int j=0; j<outArea.getColumnCount();j++) 
+                     {
+                       build.append(outArea.getValueAt( outArea.getSelectedRows()[i], j));
+                       if(j!=outArea.getColumnCount()-1)
+                           build.append(" ");
+                     }
+                     if(i!=outArea.getSelectedRowCount()-1)
+                         build.append("\n");
+                     result+=build.toString();
+                  }
+                  StringSelection selection=new StringSelection(result);
+                  Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+                }
+              }
+            } , "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
         
         southPanel=new JPanel(new BorderLayout());        
         southPanel.add(buttonArea, BorderLayout.NORTH);
@@ -680,7 +708,8 @@ public class OptionDialog extends JDialog
       }
   }
 
-  }
+
+}
 
  class SPARQLResultTableModel extends DefaultTableModel 
    {
