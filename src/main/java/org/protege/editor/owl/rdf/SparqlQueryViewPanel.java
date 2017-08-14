@@ -54,7 +54,8 @@ import javax.swing.text.PlainDocument;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 
 /*
-@Author Daniele Francesco Santamaria - University of Catania
+@Author Daniele Francesco Santamaria 
+ Department of Mathematics and Computer Science, University of Catania
 */
 
 public class SparqlQueryViewPanel extends JPanel 
