@@ -45,6 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.SwingWorker;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.AttributeSet;
@@ -85,8 +86,10 @@ public class SparqlQueryViewPanel extends JPanel
      OWLEditorKit editorKit;
      OptionConfig optionConfig;
      String [] bnodeVal;
+     ProgressWindow wp; 
     public SparqlQueryViewPanel(OWLEditorKit kit)
-     {      
+     {     
+        wp=new ProgressWindow(null, true); 
         bnodeVal=new String[]{"http://protege.org/owl2triplestore.owl"};
         optionConfig=new OptionConfig();
         editorKit=kit;        
@@ -454,7 +457,9 @@ public class SparqlQueryViewPanel extends JPanel
              {     
               // ProgressWorker pbarView=new ProgressWorker("Executing","Running Operation");
              //  pbarView.execute();
-              
+              SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+              @Override
+               protected String doInBackground(){   
               int iterator[];
               if(outArea.getSelectedRowCount()>0)                
                 {
@@ -503,12 +508,21 @@ public class SparqlQueryViewPanel extends JPanel
                  }
                  catch (IOException ex)
                    {
+                     done();
                      log.error("Error on exporting results:" + ex.toString());                     
                      ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on exporting results");           
                      messaged.setVisible(true);
                    }
-              //pbarView.terminates();
-              //pbarView.cancel(true);
+                return "done";
+                        }
+               
+                 @Override
+                  protected void done() {
+                  wp.dispose();            
+                   }
+              };
+              worker.execute();
+              wp.setVisible(true);
              }           
           }    
     }
@@ -583,12 +597,15 @@ public class SparqlQueryViewPanel extends JPanel
      
     @Override
     public void actionPerformed(ActionEvent event)
-      {    
+      {                 
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+        @Override
+        protected String doInBackground(){          
         try
-          {    
+          {             
             log.info("Executing query..."); 
             SparqlResultSet set = reasoner.executeQuery(queryArea.getText());                      
-            String data[][];                  
+            String data[][];              
             
             String names[]=new String[set.getColumnCount()];        
             for(int i=0; i<set.getColumnCount();i++)
@@ -596,19 +613,29 @@ public class SparqlQueryViewPanel extends JPanel
             
             data=createData(set);
             model.setDataVector(data, names);
-            model.fireTableDataChanged();
+            model.fireTableDataChanged();   
             outArea.revalidate();
-            outArea.repaint();
+            outArea.repaint(); 
+            log.info("Query execution successed.");
+           
           } 
         catch (SparqlReasonerException ex)
-          {      
-           log.error("Error on executing query. "+ ex.toString());
+          {   
+           done();
+           log.info("Error on executing query. "+ ex.toString());
            ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on executing query");           
            messaged.setVisible(true);           
           }
-        log.info("Query execution successed.");
-    }
-  
+        return "Done";
+        }
+        @Override
+        protected void done() {
+            wp.dispose();            
+        }
+        };
+        worker.execute();
+        wp.setVisible(true);
+      }
   }
 
    
@@ -739,6 +766,83 @@ class OptionConfig
          save(_format);
          param=_param;
        }
+  }
+
+class ProgressWindow extends javax.swing.JDialog
+  {
+    /**
+     * Creates new form ProgressWindow
+     */
+    public ProgressWindow(java.awt.Frame parent, boolean modal)
+      {
+        super(parent, modal);
+        initComponents();
+//        try
+//          {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+//              {
+//                if ("Nimbus".equals(info.getName()))
+//                  {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                  }
+//              }
+//          } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
+//          {
+//            java.util.logging.Logger.getLogger(ProgressWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//          }           
+      }
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents()
+    {
+
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);        
+        jProgressBar1.setIndeterminate(true);
+
+        jLabel1.setText("Running Operation ...");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        setLocationRelativeTo(null);
+        pack();
+    }// </editor-fold>                        
+
+    /**
+     */
+    
+    
+    // Variables declaration - do not modify                     
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JProgressBar jProgressBar1;
+    // End of variables declaration                   
   }
 
  
