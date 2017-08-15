@@ -3,6 +3,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -48,6 +49,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
@@ -126,7 +128,16 @@ public class SparqlQueryViewPanel extends JPanel
             
         model = new SPARQLResultTableModel(0, 2);
         model.setColumnIdentifiers(new String[]{"?subject","?object"});
-        outArea=new JTable(model);
+        outArea=new JTable(model){
+                        @Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
+			{
+			 Component c = super.prepareRenderer(renderer, row, column);
+			 if (!isRowSelected(row))
+			  c.setBackground(row % 2 == 0 ? getBackground() : Color.LIGHT_GRAY);
+  			 return c;
+			}
+		};
      
         scrollSouthArea=new JScrollPane(outArea);
         outArea.setFillsViewportHeight(true);
