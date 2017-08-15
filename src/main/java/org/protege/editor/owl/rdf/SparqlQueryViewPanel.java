@@ -172,7 +172,7 @@ public class SparqlQueryViewPanel extends JPanel
                   Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
                 }
               }
-            } , "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
+            } , "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK, false), JComponent.WHEN_FOCUSED);
         
         southPanel=new JPanel(new BorderLayout());        
         southPanel.add(buttonArea, BorderLayout.NORTH);
