@@ -140,12 +140,12 @@ public class SparqlQueryViewPanel extends JPanel
                             cellEditor.cancelCellEditing();
                         }
                     }
-                    Component gotFocus = e.getOppositeComponent();
-                    if (! (gotFocus.equals(outArea) || gotFocus.equals(export) )) 
+                    Component gotFocus = e.getOppositeComponent();                    
+                     if (gotFocus!=null && ! (gotFocus.equals(outArea) || gotFocus.equals(export) )) 
                       {
                         outArea.clearSelection(); 
-                        //outArea.revalidate();
-                        //outArea.repaint();
+                        outArea.revalidate();
+                        outArea.repaint();
                       }
               }           
                  });
