@@ -276,8 +276,9 @@ public class SparqlQueryViewPanel extends JPanel
         public ImageOptionPanel()
           {
                  selection=new JComboBox(new String[]{"JPG","PNG"});
+                 selection.setPreferredSize(new Dimension(200, selection.getPreferredSize().height));
                  label=new JLabel("Image format");
-                 setLayout(new FlowLayout());     
+                 setLayout(new FlowLayout(FlowLayout.LEFT));     
                  add(label);
                  add(selection);                 
           }
