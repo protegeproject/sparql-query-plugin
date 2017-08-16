@@ -49,6 +49,11 @@
 
     <dependencies>
         <dependency>
+           <groupId>org.apache.poi</groupId>
+           <artifactId>poi-ooxml</artifactId>
+           <version>3.9</version>
+        </dependency>
+        <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>protege-editor-core</artifactId>
             <version>${protege.version}</version>
