@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -18,14 +19,17 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -47,6 +51,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -185,6 +190,19 @@ public class SparqlQueryViewPanel extends JPanel
         optionD=new OptionDialog(null);
      } 
     
+    public BufferedImage createImage(JTable table) 
+      {
+        JTableHeader tableHeaderComp = table.getTableHeader();
+        int totalWidth = tableHeaderComp.getWidth() + table.getWidth();
+        int totalHeight = tableHeaderComp.getHeight() + table.getHeight();
+        BufferedImage tableImage = new BufferedImage(totalWidth, totalHeight,
+        BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2D = (Graphics2D) tableImage.getGraphics();
+        tableHeaderComp.paint(g2D);
+        g2D.translate(0, tableHeaderComp.getHeight());
+        table.paint(g2D);
+        return tableImage;
+       }
     
     public void dispose() {
        if (reasoner != null) {
@@ -243,7 +261,7 @@ public class SparqlQueryViewPanel extends JPanel
                  rowSep.setWrapStyleWord( false );                
                  ((PlainDocument) rowSep.getDocument()).setDocumentFilter(new SizeFilter(6));
                  
-                 setLayout(new FlowLayout());
+                 //setLayout(new FlowLayout());
                  add(separLabel);
                  add(colSep);
                  add(endLabel);
@@ -251,6 +269,21 @@ public class SparqlQueryViewPanel extends JPanel
           }
         public String[] getParameters(){return new String[]{colSep.getText(), rowSep.getText()};}
       }
+    
+    class ImageOptionPanel extends JPanel
+      {
+              
+        private JComboBox selection;
+        public ImageOptionPanel()
+          {
+                 selection=new JComboBox(new String[]{"JPG","PNG"});
+                 setLayout(new FlowLayout());            
+                 add(selection);
+                 
+          }
+        public String getSelection(){return selection.getSelectedItem().toString();}
+      }
+    
     class ErrorQueryMessage extends JDialog
       {
           private JPanel envir;
@@ -502,6 +535,12 @@ public class SparqlQueryViewPanel extends JPanel
                                 bw.close();
                                 break;
                             }
+                          case 3:
+                            {
+                              BufferedImage imageout= createImage(outArea);
+                              File outputfile = new File(chooser.getSelectedFile()+"."+optionD.imgOpP.getSelection());
+                              ImageIO.write(imageout, optionD.imgOpP.getSelection(), outputfile);
+                            }
                           default: break;
                     }
                   log.info("Exporting successed.");
@@ -646,6 +685,7 @@ public class OptionDialog extends JDialog
     JComboBox formatBox;
     JButton okbutton;
     TextOptionPanel textOpP;
+    ImageOptionPanel imgOpP;
     JPanel formatOptionContainer;
        
     public OptionDialog (JFrame parent)
@@ -682,6 +722,7 @@ public class OptionDialog extends JDialog
          bottomPanel.add(okbutton);
          
         textOpP=new TextOptionPanel();
+        imgOpP=new ImageOptionPanel();
         formatOptionContainer =new JPanel();
          
          add(topPanel, BorderLayout.NORTH);
@@ -726,6 +767,10 @@ public class OptionDialog extends JDialog
                         if(((JComboBox)event.getSource()).getSelectedIndex()==2)                         
                             {
                              formatOptionContainer.add(textOpP);
+                            }
+                        else if(((JComboBox)event.getSource()).getSelectedIndex()==3)                         
+                            {
+                             formatOptionContainer.add(imgOpP);
                             }
                        }
                  else {formatOptionContainer.removeAll();}
