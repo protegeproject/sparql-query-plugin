@@ -201,19 +201,7 @@ public class SparqlQueryViewPanel extends JPanel
         optionD=new OptionDialog(null);
      } 
     
-    public BufferedImage createImage(JTable table) 
-      {
-        JTableHeader tableHeaderComp = table.getTableHeader();
-        int totalWidth = tableHeaderComp.getWidth() + table.getWidth();
-        int totalHeight = tableHeaderComp.getHeight() + table.getHeight();
-        BufferedImage tableImage = new BufferedImage(totalWidth, totalHeight,
-        BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2D = (Graphics2D) tableImage.getGraphics();
-        tableHeaderComp.paint(g2D);
-        g2D.translate(0, tableHeaderComp.getHeight());
-        table.paint(g2D);
-        return tableImage;
-       }
+    
     
     public void dispose() {
        if (reasoner != null) {
@@ -282,15 +270,16 @@ public class SparqlQueryViewPanel extends JPanel
       }
     
     class ImageOptionPanel extends JPanel
-      {
-              
+      {              
         private JComboBox selection;
+        private JLabel label;
         public ImageOptionPanel()
           {
                  selection=new JComboBox(new String[]{"JPG","PNG"});
-                 setLayout(new FlowLayout());            
-                 add(selection);
-                 
+                 label=new JLabel("Image format");
+                 setLayout(new FlowLayout());     
+                 add(label);
+                 add(selection);                 
           }
         public String getSelection(){return selection.getSelectedItem().toString();}
       }
@@ -487,6 +476,20 @@ public class SparqlQueryViewPanel extends JPanel
                }
           }
 
+        public BufferedImage createImage(JTable table) 
+      {
+        JTableHeader tableHeaderComp = table.getTableHeader();
+        int totalWidth = tableHeaderComp.getWidth() + table.getWidth();
+        int totalHeight = tableHeaderComp.getHeight() + table.getHeight();
+        BufferedImage tableImage = new BufferedImage(totalWidth, totalHeight,
+        BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2D = (Graphics2D) tableImage.getGraphics();
+        tableHeaderComp.paint(g2D);
+        g2D.translate(0, tableHeaderComp.getHeight());
+        table.paint(g2D);
+        return tableImage;
+       }
+        
         @Override
         public void actionPerformed(ActionEvent e)
           { 
@@ -551,6 +554,7 @@ public class SparqlQueryViewPanel extends JPanel
                               BufferedImage imageout= createImage(outArea);
                               File outputfile = new File(chooser.getSelectedFile()+"."+optionD.imgOpP.getSelection());
                               ImageIO.write(imageout, optionD.imgOpP.getSelection(), outputfile);
+                              break;
                             }
                           default: break;
                     }
@@ -715,7 +719,7 @@ public class OptionDialog extends JDialog
                          }});
          
          
-         formatBox=new JComboBox(new String[]{"Microsoft Excel", "SPARQL JSON", "Simple Text"});
+         formatBox=new JComboBox(new String[]{"Microsoft Excel", "SPARQL JSON", "Simple Text", "Image"});
          formatBox.setPreferredSize(new Dimension(200, formatBox.getPreferredSize().height));
          
          
