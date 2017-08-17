@@ -825,29 +825,25 @@ public class OptionDialog extends JDialog
         @Override
         public void insertString (int offset, String str, AttributeSet a) throws BadLocationException 
           {
-            super.insertString(offset, str, a);
-            String text = getText(0, getLength());
-            int before = findLastNonWordChar(text, offset);
-            if (before < 0) 
-                before = 0;
-            int after = findFirstNonWordChar(text, offset + str.length());
-            int wordL = before;
-            int wordR = before;
-            while (wordR <= after) 
-              {
-               if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
-                  if (text.substring(wordL, wordR).matches("(\\W)*(PREFIX|DISTINCT|SELECT|WHERE)"))
-                       setCharacterAttributes(wordL, wordR - wordL, attr, false);
-                  else if (text.substring(wordL, wordR).matches("(\\W)*(\\{|\\}|\\<|>)"))
-                       setCharacterAttributes(wordL, wordR - wordL, attrRed, false);
-                  else if (text.substring(wordL, wordR).matches("(\\W)*\\?[\\w]+"))
-                       setCharacterAttributes(wordL, wordR - wordL, attrGreen, false);
-                   else
-                       setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
+                super.insertString(offset, str, a); 
+                String text = getText(0, getLength());
+                int before = findLastNonWordChar(text, offset);
+                if (before < 0) before = 0;
+                int after = findFirstNonWordChar(text, offset + str.length());
+                int wordL = before;
+                int wordR = before;                               
+                while (wordR <= after) {
+                    if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
+                        if (text.substring(wordL, wordR).matches("(\\W)*(PREFIX|DISTINCT|SELECT|WHERE)"))
+                            setCharacterAttributes(wordL, wordR - wordL, attr, false);
+                        else if (text.substring(wordL, wordR).matches("(\\W)*(\\{|\\}|<|\\>)"))
+                          setCharacterAttributes(wordL, wordR - wordL, attrRed, false);
+                        else
+                            setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
                         wordL = wordR;
-               }
-                 wordR++;
-              }
+                    }
+                    wordR++;
+                }
             }
 
         @Override
@@ -859,7 +855,7 @@ public class OptionDialog extends JDialog
                 if (before < 0) before = 0;
                 int after = findFirstNonWordChar(text, offs);
 
-                if (text.substring(before, after).matches("(\\W)*(private|public|protected)")) {
+                if (text.substring(before, after).matches("(\\W)*(\\{|\\}|\\<|\\>)")) {
                     setCharacterAttributes(before, after - before, attr, false);
                 } else {
                     setCharacterAttributes(before, after - before, attrBlack, false);
@@ -867,7 +863,7 @@ public class OptionDialog extends JDialog
             }
             
             private int findLastNonWordChar (String text, int index) {
-        while (--index >= 0) {
+            while (--index >= 0) {
             if (String.valueOf(text.charAt(index)).matches("\\W")) {
                 break;
             }
