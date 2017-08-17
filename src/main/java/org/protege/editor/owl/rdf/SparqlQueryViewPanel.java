@@ -97,6 +97,7 @@ public class SparqlQueryViewPanel extends JPanel
      OptionConfig optionConfig;
      String [] bnodeVal;
      ProgressWindow wp; 
+     SPARQLQueryDocument syntaxHL;
     public SparqlQueryViewPanel(OWLEditorKit kit)
      {     
         wp=new ProgressWindow(null, true); 
@@ -113,8 +114,7 @@ public class SparqlQueryViewPanel extends JPanel
              log.info(ex.toString());
            }
         setLayout(new GridLayout(1,1));
-        queryArea=new JTextPane();
-        queryArea.setText(defaultText);
+        queryArea=new JTextPane();        
         scrollNorthArea=new JScrollPane(queryArea);
         
         execute= new JButton("Execute Query");
@@ -193,6 +193,9 @@ public class SparqlQueryViewPanel extends JPanel
               }
             } , "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK, false), JComponent.WHEN_FOCUSED);
         
+        syntaxHL= new SPARQLQueryDocument();        
+        queryArea.setDocument(syntaxHL);
+        queryArea.setText(defaultText);
         southPanel=new JPanel(new BorderLayout());        
         southPanel.add(buttonArea, BorderLayout.NORTH);
         southPanel.add(scrollSouthArea, BorderLayout.CENTER);
@@ -807,13 +810,17 @@ public class OptionDialog extends JDialog
      {
         StyleContext cont;
         AttributeSet attr;
+        AttributeSet attrRed;
         AttributeSet attrBlack;
+        AttributeSet attrGreen;
         public SPARQLQueryDocument()
           {
             super();
             cont = StyleContext.getDefaultStyleContext();
-            attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.RED);
+            attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.blue);
+            attrRed = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.red);
             attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+            attrGreen = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(0,102,0));
           }
         @Override
         public void insertString (int offset, String str, AttributeSet a) throws BadLocationException 
@@ -831,6 +838,10 @@ public class OptionDialog extends JDialog
                if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
                   if (text.substring(wordL, wordR).matches("(\\W)*(PREFIX|DISTINCT|SELECT|WHERE)"))
                        setCharacterAttributes(wordL, wordR - wordL, attr, false);
+                  else if (text.substring(wordL, wordR).matches("(\\W)*(\\{|\\}|\\<|>)"))
+                       setCharacterAttributes(wordL, wordR - wordL, attrRed, false);
+                  else if (text.substring(wordL, wordR).matches("(\\W)*\\?[\\w]+"))
+                       setCharacterAttributes(wordL, wordR - wordL, attrGreen, false);
                    else
                        setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
                         wordL = wordR;
