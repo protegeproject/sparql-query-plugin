@@ -89,12 +89,10 @@ import javax.swing.text.StyleContext;
 		for (int i = startLine; i <= endLine; i++)
 			applyHighlighting(content, i);
 		// Resolve highlighting to the next end multi line delimiter
-		//if (isMultiLineComment())
-		//	commentLinesAfter(content, endLine);
-		//else
-		//	highlightLinesAfter(content, endLine);
-                if (!isMultiLineComment())
-                    highlightLinesAfter(content, endLine);
+		if (isMultiLineComment())
+			commentLinesAfter(content, endLine);
+		else
+			highlightLinesAfter(content, endLine);
 	}
  
 	/*
