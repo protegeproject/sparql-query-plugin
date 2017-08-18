@@ -824,21 +824,21 @@ public class OptionDialog extends JDialog
             attrGreen = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(0,102,0));
           }
 
-        private boolean findDelimiter(String text, int start, int end, AttributeSet attrRed, boolean b)
-          {
-            for(int i=start; i<end; i++)
-              {
-                for(int j=0; j<sparqlDelimiter.length;j++)
-                  {
-                     if(text.charAt(i)==sparqlDelimiter[j])
-                       {
-                         setCharacterAttributes(i, i, attr, false);
-                         return true;
-                       }
-                  }
-              }
-            return false;
-          }
+//        private boolean findDelimiter(String text, int start, int end, AttributeSet attrRed, boolean b)
+//          {
+//            for(int i=start; i<end; i++)
+//              {
+//                for(int j=0; j<sparqlDelimiter.length;j++)
+//                  {
+//                     if(text.charAt(i)==sparqlDelimiter[j])
+//                       {
+//                         setCharacterAttributes(i, i, attr, false);
+//                         return true;
+//                       }
+//                  }
+//              }
+//            return false;
+//          }
         @Override
         public void insertString (int offset, String str, AttributeSet a) throws BadLocationException 
           {
@@ -857,8 +857,8 @@ public class OptionDialog extends JDialog
                    log.info(text.substring(wordL, wordR));
                   if (text.substring(wordL, wordR).matches("(\\W)*(PREFIX|DISTINCT|SELECT|WHERE)*"))
                        setCharacterAttributes(wordL, wordR - wordL, attr, false);
-                  else if (findDelimiter(text.substring(wordL, wordR), wordL, wordR,attrRed,false))
-                    {}              
+                 // else if (findDelimiter(text.substring(wordL, wordR), wordL, wordR,attrRed,false))
+                 //   {}              
                   else if (text.substring(wordL, wordR).matches("\\?[\\w]+"))
                      setCharacterAttributes(wordL, wordR - wordL, attrGreen, false);
                   else
