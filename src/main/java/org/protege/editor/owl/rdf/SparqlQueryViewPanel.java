@@ -59,6 +59,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
+import org.jdesktop.swingx.JXTable;
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 
 /*
@@ -71,7 +72,7 @@ public class SparqlQueryViewPanel extends JPanel
      static final Logger log = LoggerFactory.getLogger(SparqlQueryViewPanel.class);
      SparqlReasoner reasoner;
      JTextPane queryArea;
-     JTable outArea;
+     JXTable outArea;
      SPARQLResultTableModel model;
      JPanel buttonArea;
      JPanel southPanel;
@@ -133,7 +134,7 @@ public class SparqlQueryViewPanel extends JPanel
             
         model = new SPARQLResultTableModel(0, 2);
         model.setColumnIdentifiers(new String[]{"?subject","?object"});
-        outArea=new JTable(model){
+        outArea=new JXTable(model){
                         @Override
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
 			{
@@ -145,7 +146,7 @@ public class SparqlQueryViewPanel extends JPanel
 		};
      
         scrollSouthArea=new JScrollPane(outArea);
-        outArea.setFillsViewportHeight(true);
+        outArea.setHorizontalScrollEnabled(true);
         outArea.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e)
@@ -707,8 +708,8 @@ public class OptionDialog extends JDialog
     public OptionDialog (JFrame parent)
      {
          super(parent, "Options");
-         setSize(300,150);
-         setPreferredSize(new Dimension(300,150));
+         setSize(320,170);
+         setPreferredSize(new Dimension(320,170));
          setVisible(false);         
          setModal(true);        
          setLayout(new BorderLayout());

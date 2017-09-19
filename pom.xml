@@ -68,6 +68,11 @@
             <artifactId>rdf-library</artifactId>
             <version>${rdflib.version}</version>
         </dependency>
+        <dependency>
+        <groupId>org.swinglabs.swingx</groupId>
+       <artifactId>swingx-all</artifactId>
+        <version>1.6.4</version>
+     </dependency>
     </dependencies>
     
     <build>
@@ -116,7 +121,7 @@
                     <instructions>
                         <Bundle-SymbolicName>org.protege.editor.owl.rdf;singleton:=true</Bundle-SymbolicName>
                         <Bundle-Vendor>The Protege Development Team</Bundle-Vendor>
-                        <Export-Package>org.protege.editor.owl.rdf.*;version=${project.version}</Export-Package>
+                        <Export-Package>org.protege.editor.owl.rdf.*;version=${project.version},org.jdesktop.*;version="1.6.4"</Export-Package>
                         <Import-Package>
                             org.protege.editor.core;version="5.0", <!-- equivalent to [5.0,infinity) -->
                             org.protege.editor.core.ui.error;version="5.0",
@@ -127,6 +132,7 @@
                             org.protege.editor.owl.ui.table;version="5.0",
                             org.protege.editor.owl.ui.view;version="5.0",
                             org.protege.owl.rdf;version="2.0",
+                           org.jdesktop.*;version="1.6.4",
                             *
                         </Import-Package>
                         <Include-Resource>{maven-resources}</Include-Resource>
