@@ -33,6 +33,10 @@
             <name>Timothy Redmond</name>
             <email>tredmond@stanford.edu</email>
         </developer>
+         <developer>
+            <name>Daniele Francesco Santamaria</name>
+            <email>santamaria@dmi.unict.it</email>
+        </developer>
     </developers>
 
     <scm>

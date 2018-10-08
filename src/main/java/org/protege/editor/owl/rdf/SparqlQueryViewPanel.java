@@ -57,9 +57,15 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
+<<<<<<< HEAD
 import org.jdesktop.swingx.JXTable;
+=======
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+>>>>>>> SyntaxHL
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 
 /*
@@ -95,6 +101,8 @@ public class SparqlQueryViewPanel extends JPanel
      OptionConfig optionConfig;
      String [] bnodeVal;
      ProgressWindow wp; 
+     SPARQLQueryDocument syntaxHL;
+     char[] sparqlDelimiter=new char[]{'}','{','<','>'};
     public SparqlQueryViewPanel(OWLEditorKit kit)
      {     
         wp=new ProgressWindow(null, true); 
@@ -111,8 +119,7 @@ public class SparqlQueryViewPanel extends JPanel
              log.info(ex.toString());
            }
         setLayout(new GridLayout(1,1));
-        queryArea=new JTextPane();
-        queryArea.setText(defaultText);
+        queryArea=new JTextPane();        
         scrollNorthArea=new JScrollPane(queryArea);
         
         execute= new JButton("Execute Query");
@@ -191,6 +198,9 @@ public class SparqlQueryViewPanel extends JPanel
               }
             } , "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.CTRL_DOWN_MASK, false), JComponent.WHEN_FOCUSED);
         
+        syntaxHL= new SPARQLQueryDocument();        
+        queryArea.setDocument(syntaxHL);
+        queryArea.setText(defaultText);
         southPanel=new JPanel(new BorderLayout());        
         southPanel.add(buttonArea, BorderLayout.NORTH);
         southPanel.add(scrollSouthArea, BorderLayout.CENTER);
@@ -679,7 +689,8 @@ public class SparqlQueryViewPanel extends JPanel
           {   
            done();
            log.info("Error on executing query. "+ ex.toString());
-           ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on executing query");           
+           ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on executing query");
+           messaged.setResizable(true);
            messaged.setVisible(true);           
           }
         return "Done";
@@ -798,6 +809,114 @@ public class OptionDialog extends JDialog
   }
 
 
+     /*
+         Thanks to @shuangwhywhy for this class
+      */
+   class SPARQLQueryDocument extends DefaultStyledDocument
+     {
+        StyleContext cont;
+        AttributeSet attr;
+        AttributeSet attrRed;
+        AttributeSet attrBlack;
+        AttributeSet attrGreen;
+        public SPARQLQueryDocument()
+          {
+            super();
+            cont = StyleContext.getDefaultStyleContext();
+            attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.blue);
+            attrRed = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.red);
+            attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+            attrGreen = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(0,102,0));
+          }
+
+//        private boolean findDelimiter(String text, int start, int end, AttributeSet attrRed, boolean b)
+//          {
+//            for(int i=start; i<end; i++)
+//              {
+//                for(int j=0; j<sparqlDelimiter.length;j++)
+//                  {
+//                     if(text.charAt(i)==sparqlDelimiter[j])
+//                       {
+//                         setCharacterAttributes(i, i, attr, false);
+//                         return true;
+//                       }
+//                  }
+//              }
+//            return false;
+//          }
+        @Override
+        public void insertString (int offset, String str, AttributeSet a) throws BadLocationException 
+          {
+            super.insertString(offset, str, a);
+            String text = getText(0, getLength());
+            int before = findLastNonWordChar(text, offset);
+            if (before < 0) 
+                before = 0;
+            int after = findFirstNonWordChar(text, offset + str.length());
+            int wordL = before;
+            int wordR = before;
+            while (wordR <= after) 
+              {
+               if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\s"))
+                 {
+                   log.info(text.substring(wordL, wordR));
+                  if (text.substring(wordL, wordR).matches("(\\s)*(\\{|\\}|PREFIX|DISTINCT|SELECT|WHERE|UNION|FILTER|LIMIT|OFFSET|OPTIONAL|GROUP|ORDER|BY)"))
+                       setCharacterAttributes(wordL, wordR - wordL, attr, false);
+                 // else if (findDelimiter(text.substring(wordL, wordR), wordL, wordR,attrRed,false))
+                 //   {}              
+                  else if (text.substring(wordL, wordR).matches("(\\s)*(\\?[\\w]+)"))
+                     setCharacterAttributes(wordL, wordR - wordL, attrGreen, false);
+                  else if (text.substring(wordL, wordR).matches("(\\s)*(<(.+?)>)"))
+                       setCharacterAttributes(wordL, wordR - wordL, attrRed, false);                 
+                  else
+                     setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
+                  wordL = wordR;
+               }
+                 wordR++;
+              }
+            }
+
+        @Override
+            public void remove (int offs, int len) throws BadLocationException {
+                super.remove(offs, len);
+
+                String text = getText(0, getLength());
+                int before = findLastNonWordChar(text, offs);
+                if (before < 0) before = 0;
+                int after = findFirstNonWordChar(text, offs);
+
+                if(text.substring(before, after).matches("(\\s)*(\\{|\\}|PREFIX|DISTINCT|SELECT|WHERE|UNION|FILTER|LIMIT|OFFSET|OPTIONAL|GROUP|ORDER|BY)"))
+                  {
+                    setCharacterAttributes(before, after - before, attr, false);
+                  } 
+                else if (text.substring(before, after).matches("(\\s)*(\\?[\\w]+)"))
+                     setCharacterAttributes(before, after - before, attrGreen, false);
+                  else if (text.substring(before, after).matches("(\\s)*(<(.+?)>)"))
+                       setCharacterAttributes(before, after - before, attrRed, false);                 
+                  else 
+                  {
+                    setCharacterAttributes(before, after - before, attrBlack, false);
+                }
+            }
+            
+            private int findLastNonWordChar (String text, int index) {
+        while (--index >= 0) {
+            if (String.valueOf(text.charAt(index)).matches("\\s")) {
+                break;
+            }
+        }
+        return index;
+    }
+    private int findFirstNonWordChar (String text, int index) {
+        while (index < text.length()) {
+            if (String.valueOf(text.charAt(index)).matches("\\s")) {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+        }
 }
 
  class SPARQLResultTableModel extends DefaultTableModel 
