@@ -685,7 +685,8 @@ public class SparqlQueryViewPanel extends JPanel
           {   
            done();
            log.info("Error on executing query. "+ ex.toString());
-           ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on executing query");           
+           ErrorQueryMessage messaged=new ErrorQueryMessage(ex.toString(), "Error on executing query");
+           messaged.setResizable(true);
            messaged.setVisible(true);           
           }
         return "Done";
@@ -852,15 +853,17 @@ public class OptionDialog extends JDialog
             int wordR = before;
             while (wordR <= after) 
               {
-               if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W"))
+               if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\s"))
                  {
                    log.info(text.substring(wordL, wordR));
-                  if (text.substring(wordL, wordR).matches("(\\W)*(PREFIX|DISTINCT|SELECT|WHERE)*"))
+                  if (text.substring(wordL, wordR).matches("(\\s)*(\\{|\\}|PREFIX|DISTINCT|SELECT|WHERE|UNION|FILTER|LIMIT|OFFSET|OPTIONAL|GROUP|ORDER|BY)"))
                        setCharacterAttributes(wordL, wordR - wordL, attr, false);
                  // else if (findDelimiter(text.substring(wordL, wordR), wordL, wordR,attrRed,false))
                  //   {}              
-                  else if (text.substring(wordL, wordR).matches("\\?[\\w]+"))
+                  else if (text.substring(wordL, wordR).matches("(\\s)*(\\?[\\w]+)"))
                      setCharacterAttributes(wordL, wordR - wordL, attrGreen, false);
+                  else if (text.substring(wordL, wordR).matches("(\\s)*(<(.+?)>)"))
+                       setCharacterAttributes(wordL, wordR - wordL, attrRed, false);                 
                   else
                      setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
                   wordL = wordR;
@@ -878,16 +881,23 @@ public class OptionDialog extends JDialog
                 if (before < 0) before = 0;
                 int after = findFirstNonWordChar(text, offs);
 
-                if (text.substring(before, after).matches("(\\W)*(private|public|protected)")) {
+                if(text.substring(before, after).matches("(\\s)*(\\{|\\}|PREFIX|DISTINCT|SELECT|WHERE|UNION|FILTER|LIMIT|OFFSET|OPTIONAL|GROUP|ORDER|BY)"))
+                  {
                     setCharacterAttributes(before, after - before, attr, false);
-                } else {
+                  } 
+                else if (text.substring(before, after).matches("(\\s)*(\\?[\\w]+)"))
+                     setCharacterAttributes(before, after - before, attrGreen, false);
+                  else if (text.substring(before, after).matches("(\\s)*(<(.+?)>)"))
+                       setCharacterAttributes(before, after - before, attrRed, false);                 
+                  else 
+                  {
                     setCharacterAttributes(before, after - before, attrBlack, false);
                 }
             }
             
             private int findLastNonWordChar (String text, int index) {
         while (--index >= 0) {
-            if (String.valueOf(text.charAt(index)).matches("\\W")) {
+            if (String.valueOf(text.charAt(index)).matches("\\s")) {
                 break;
             }
         }
@@ -895,7 +905,7 @@ public class OptionDialog extends JDialog
     }
     private int findFirstNonWordChar (String text, int index) {
         while (index < text.length()) {
-            if (String.valueOf(text.charAt(index)).matches("\\W")) {
+            if (String.valueOf(text.charAt(index)).matches("\\s")) {
                 break;
             }
             index++;
