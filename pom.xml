@@ -33,6 +33,10 @@
             <name>Timothy Redmond</name>
             <email>tredmond@stanford.edu</email>
         </developer>
+         <developer>
+            <name>Daniele Francesco Santamaria</name>
+            <email>santamaria@dmi.unict.it</email>
+        </developer>
     </developers>
 
     <scm>
@@ -48,6 +52,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+           <groupId>org.apache.poi</groupId>
+           <artifactId>poi-ooxml</artifactId>
+           <version>3.9</version>
+        </dependency>
         <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>protege-editor-core</artifactId>
