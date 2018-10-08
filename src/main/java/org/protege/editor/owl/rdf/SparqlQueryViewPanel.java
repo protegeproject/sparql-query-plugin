@@ -60,12 +60,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
-<<<<<<< HEAD
 import org.jdesktop.swingx.JXTable;
-=======
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
->>>>>>> SyntaxHL
 import org.protege.editor.owl.rdf.repository.BasicSparqlReasonerFactory;
 
 /*
