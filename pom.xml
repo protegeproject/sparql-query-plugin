@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
     
     <groupId>edu.stanford.protege</groupId>
     <artifactId>sparql-query-plugin</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>SPARQL Query Plugin</name>
@@ -47,8 +47,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <protege.version>5.2.0</protege.version>
-        <rdflib.version>2.0.3</rdflib.version>
+        <protege.version>5.5.0-beta-7</protege.version>
+        <rdflib.version>3.0.0</rdflib.version>
     </properties>
 
     <dependencies>
@@ -135,8 +135,7 @@
                             org.protege.editor.owl.ui.renderer;version="5.0",
                             org.protege.editor.owl.ui.table;version="5.0",
                             org.protege.editor.owl.ui.view;version="5.0",
-                            org.protege.owl.rdf;version="2.0",
-                           org.jdesktop.*;version="1.6.4",
+                            org.protege.owl.rdf;version="2.0",                           
                             *
                         </Import-Package>
                         <Include-Resource>{maven-resources}</Include-Resource>
