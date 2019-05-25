@@ -77,8 +77,7 @@
        <artifactId>swingx-all</artifactId>
         <version>1.6.4</version>
      </dependency>
-    </dependencies>
-    
+    </dependencies>    
     <build>
         <plugins>
             <plugin>
