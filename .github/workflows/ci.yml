@@ -5,21 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          path: sparql-query-plugin
-      - uses: actions/checkout@v5
-        with:
-          repository: protegeproject/rdf-library
-          ref: f796a3b8ab4c22ed9b0ec392cb5e4b39f40fb40f
-          path: rdf-library
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '11'
           cache: maven
-      - name: Install paired RDF Library snapshot
-        working-directory: rdf-library
-        run: mvn --batch-mode clean install
-      - name: Verify SPARQL Query
-        working-directory: sparql-query-plugin
-        run: mvn --batch-mode clean verify
+      - run: mvn --batch-mode clean verify
