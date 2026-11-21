@@ -2,7 +2,7 @@
 
 Version 4 targets Protégé 6, OWL API 5.5.1, Java 11, and RDF Library 4. It retains the existing Sesame query engine and public plugin API.
 
-During development, first build and install the paired RDF Library 4.0.0-SNAPSHOT from the `protegeproject/rdf-library` Protégé 6 migration branch:
+RDF Library 4.0.0 resolves from Maven Central. To test a paired local build, first build and install RDF Library 4.0.0 from `protegeproject/rdf-library`:
 
 ```sh
 mvn --batch-mode clean install
